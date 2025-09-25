@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "video_source": "stream",
+    "timestamp_utc": "2025-09-25T05:40:07.776504",
+    "fps": 30
+  },
+  "summary": {
+    "vehicles_total": 1432,
+    "unique_ids": 10,
+    "by_class_counts": {
+      "car": 1065,
+      "truck": 367
+    },
+    "speed_kmh": {
+      "mean": 104.87675350475575,
+      "min": 0.0,
+      "max": 235.3846153846154,
+      "std": 28.356075145225255,
+      "percentiles": {
+        "p50": 108.0,
+        "p85": 127.89473684210527,
+        "p95": 144.0,
+        "p99": 191.5467032967037
+      }
+    }
+  },
+  "speed_distribution": {
+    "bins_kmh": [
+      {
+        "range": "0-30",
+        "count": 29
+      },
+      {
+        "range": "31-60",
+        "count": 34
+      },
+      {
+        "range": "61-90",
+        "count": 415
+      },
+      {
+        "range": "91-120",
+        "count": 602
+      },
+      {
+        "range": "121-150",
+        "count": 318
+      },
+      {
+        "range": ">151",
+        "count": 30
+      }
+    ]
+  },
+  "violations": {
+    "speed_limit_kmh": 90,
+    "total_violators": 953,
+    "rate": 0.6655027932960894,
+    "top_violators": [
+      {
+        "tracker_id": 13,
+        "class": "car",
+        "speed_kmh": 235.3846153846154,
+        "frame": 405,
+        "time_utc": "2025-09-25T05:36:02.954595"
+      },
+      {
+        "tracker_id": 13,
+        "class": "car",
+        "speed_kmh": 224.99999999999997,
+        "frame": 406,
+        "time_utc": "2025-09-25T05:36:04.833178"
+      },
+      {
+        "tracker_id": 13,
+        "class": "car",
+        "speed_kmh": 222.00000000000003,
+        "frame": 407,
+        "time_utc": "2025-09-25T05:36:06.664273"
+      },
+      {
+        "tracker_id": 13,
+        "class": "car",
+        "speed_kmh": 219.375,
+        "frame": 408,
+        "time_utc": "2025-09-25T05:36:08.543387"
+      },
+      {
+        "tracker_id": 13,
+        "class": "car",
+        "speed_kmh": 217.05882352941174,
+        "frame": 409,
+        "time_utc": "2025-09-25T05:36:10.474579"
+      }
+    ]
+  }
+}

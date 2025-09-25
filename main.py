@@ -69,7 +69,9 @@ class ViewTransformer:
         transformed_points = cv2.perspectiveTransform(reshaped_points, self.m)
         return transformed_points.reshape(-1, 2)
 
-
+#####################################################################################################################
+# This part it's just to get argument via console 
+#####################################################################################################################
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Vehicle Speed Estimation using Ultralytics and Supervision"
@@ -97,13 +99,18 @@ def parse_arguments() -> argparse.Namespace:
     )
 
     return parser.parse_args()
-
+#####################################################################################################################
+#####################################################################################################################
 
 if __name__ == "__main__":
+#####################################################################################################################
+# This part define drawing parameters with the help o supervision sv
+#####################################################################################################################
     args = parse_arguments()
 
     video_info = sv.VideoInfo.from_video_path(video_path=args.source_video_path)
-    model = YOLO("yolov8n.pt")
+
+    model = YOLO("yolo11x.pt")
 
     byte_track = sv.ByteTrack(
         frame_rate=video_info.fps, track_activation_threshold=args.confidence_threshold
@@ -112,22 +119,30 @@ if __name__ == "__main__":
     thickness = sv.calculate_optimal_line_thickness(
         resolution_wh=video_info.resolution_wh
     )
+
     text_scale = sv.calculate_optimal_text_scale(resolution_wh=video_info.resolution_wh)
+
     box_annotator = sv.BoxAnnotator(thickness=thickness)
+
     label_annotator = sv.LabelAnnotator(
         text_scale=text_scale,
         text_thickness=thickness,
         text_position=sv.Position.BOTTOM_CENTER,
     )
+
     trace_annotator = sv.TraceAnnotator(
         thickness=thickness,
         trace_length=video_info.fps * 2,
         position=sv.Position.BOTTOM_CENTER,
     )
+#####################################################################################################################
+#####################################################################################################################
 
     frame_generator = sv.get_video_frames_generator(source_path=args.source_video_path)
 
+    # It defines a zone inside the image
     polygon_zone = sv.PolygonZone(polygon=SOURCE)
+
     view_transformer = ViewTransformer(source=SOURCE, target=TARGET)
 
     coordinates = defaultdict(lambda: deque(maxlen=video_info.fps))
