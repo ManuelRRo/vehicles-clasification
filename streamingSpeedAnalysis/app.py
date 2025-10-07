@@ -137,8 +137,6 @@ st.title("Streaming de video con YOLO + Supervision (ByteTrack)")
 with st.sidebar:
     st.header("Parámetros")
     uploaded = st.file_uploader("Sube un video (MP4/MOV/AVI)", type=["mp4", "mov", "avi"])
-    default_path = "ranchoNavarra.mp4"
-    source_path_text = st.text_input("…o ingresa ruta local", value=default_path)
 
     confidence_threshold = st.slider("Confidence threshold", 0.0, 1.0, 0.3, 0.05)
     iou_threshold = st.slider("IoU threshold (NMS)", 0.0, 1.0, 0.7, 0.05)
@@ -154,8 +152,6 @@ if uploaded:
     with open(tmp_path, "wb") as f:
         f.write(uploaded.read())
     source_video_path = str(tmp_path)
-else:
-    source_video_path = source_path_text
 
 frame_placeholder = st.empty()
 status_placeholder = st.empty()

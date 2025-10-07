@@ -52,6 +52,10 @@ frame2 = box_annotator.annotate(scene=frame2, detections=detections)
 frame2 = zone_annotator.annotate(scene=frame2)
 frame2 = zone_annotator2.annotate(scene=frame2)
 frame2 = zone_annotator3.annotate(scene=frame2)
+
+print(f"Current count in zone 1: {zone.current_count}")
+print(f"Current count in zone 2: {zone2.current_count}")
+print(f"Current count in zone 3: {zone3.current_count}")
 sv.plot_image(frame2)
 plt.savefig("resultado.png")
 ##############################################################################################

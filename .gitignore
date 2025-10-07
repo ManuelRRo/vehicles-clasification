@@ -3,3 +3,6 @@ env/
 *.mp4
 *.pt
 zoneDetection/frames
+sampleVideos/
+videoResults/
+speedAnalysisCv2/data/

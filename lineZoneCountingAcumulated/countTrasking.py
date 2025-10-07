@@ -1,14 +1,17 @@
+# archivo recuperado de la m[aquinas ] virtual con gpu
 import os
-HOME = os.getcwd()
-print(HOME)
 import matplotlib.pyplot as plt
 import numpy as np
 import supervision as sv
 from ultralytics import YOLO
 from supervision.assets import download_assets, VideoAssets
+from collections import defaultdict
 
+
+HOME = os.getcwd()
+print(HOME)
 #SOURCE_VIDEO_PATH = f"{HOME}/data/vehicles.mp4"
-SOURCE_VIDEO_PATH = f"{HOME}/proceres-11-seg.mp4"
+SOURCE_VIDEO_PATH = f"{HOME}/../sampleVideos/proceres.mp4"
 
 byte_tracker = sv.ByteTrack()
 generator = sv.get_video_frames_generator(SOURCE_VIDEO_PATH)
@@ -39,15 +42,21 @@ labels = [
     in zip(detections.class_id, detections.confidence)
 ]
 
-bounding_box_annotator = sv.BoxAnnotator(thickness=1)
-label_annotator = sv.LabelAnnotator(text_thickness=1, text_scale=0.7)
-trace_annotator = sv.TraceAnnotator(thickness=1)
+box_annotator = sv.BoxAnnotator(thickness=6)
+bounding_box_annotator = sv.BoxAnnotator(thickness=4)
+label_annotator = sv.LabelAnnotator(text_thickness=4, text_scale=2)
+trace_annotator = sv.TraceAnnotator(thickness=4)
+annotated_frame = frame.copy()
+annotated_frame = box_annotator.annotate(annotated_frame, detections)
+annotated_frame = label_annotator.annotate(annotated_frame, detections, labels)
+annotated_frame = frame.copy()
+annotated_frame = line_zone_annotator.annotate(annotated_frame, line_counter=line_zone)
+# Diccionario para acumular conteos por clase
+cross_counts = defaultdict(int)
 
 def callback(frame: np.ndarray, index:int) -> np.ndarray:
     results = model(frame, verbose=False)[0]
-    
     detections = sv.Detections.from_ultralytics(results)
-    
     detections = byte_tracker.update_with_detections(detections)
 
     labels = [
@@ -57,27 +66,51 @@ def callback(frame: np.ndarray, index:int) -> np.ndarray:
     ]
 
     annotated_frame = frame.copy()
-
     annotated_frame = trace_annotator.annotate(
         scene=annotated_frame,
         detections=detections)
-    
     annotated_frame = bounding_box_annotator.annotate(
         scene=annotated_frame,
         detections=detections)
-    
     annotated_frame = label_annotator.annotate(
         scene=annotated_frame,
         detections=detections,
         labels=labels)
 
-    line_zone.trigger(detections)
+#    crossed_in, crossed_out = line_zone.trigger(detections)
+   # line_zone.trigger(detections)
+#    detections_in = line_zone.out_count
+#    detections_out = line_zone.in_count
+#    detections_in = detections[crossed_in]
+#    detections_out = detections[crossed_out]
+#    class_id_test = detections_out.class_id
+#    if len(class_id_test) > 0:
+#       print(f"detecction out class {class_id_test} \n")
+#    print(f"detection out {detections_in}")
 
-    #crossed_in, crossed_out = line_zone.trigger(detections)
-    detections_in = line_zone.out_count
-    detections_out = line_zone.in_count
-    print(detections_in)
-    print(detections_out)
+
+# --- dentro de tu loop de procesamiento ---
+    crossed_in, crossed_out = line_zone.trigger(detections)
+#    detections_in, detections_out = line_zone.trigger(detections)
+    detections_out = detections[crossed_out]
+    detections_in = detections[crossed_in]
+
+    class_id_test = detections_out.class_id
+
+    if len(class_id_test) > 0:
+        for cls_id in class_id_test:
+            cls_id = int(cls_id)
+            # nombre de la clase según el modelo
+            class_name = model.model.names[cls_id]
+
+            # acumular conteo
+            cross_counts[class_name] += 1
+
+            # imprimir detección en tiempo real
+            print(f"Detección out: class {cls_id} ({class_name})")
+
+    # también puedes imprimir el resumen acumulado
+    print("Resumen acumulado de cruces:", dict(cross_counts))
 
     return  line_zone_annotator.annotate(annotated_frame, line_counter=line_zone)
 # sv.plot_image(annotated_frame, (12, 12))
