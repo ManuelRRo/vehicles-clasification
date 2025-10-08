@@ -1,0 +1,32 @@
+services:
+  postgres-db-vehicle:
+    container_name: postgres-db-vehicle
+    image: postgres:14.5
+    restart: always
+    volumes:
+     - ./data_postgres/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: mypassword
+    networks:
+      - mynetwork
+    ports:
+      - "15010:5432"
+
+  pgadmin-web-vehicle:
+    container_name: pgadmin-web-vehicle
+    image: dpage/pgadmin4
+    volumes:
+     - ./pgadmin_data:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@mail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    networks:
+      - mynetwork
+    ports:
+      - "15001:80"
+    depends_on:
+      - postgres-db-vehicle
+
+networks:
+  mynetwork:
+        driver: bridge

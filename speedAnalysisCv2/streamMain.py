@@ -16,10 +16,10 @@ model = YOLO("traffic_analysis.pt")
 # Inicializar el tracker y los anotadores
 tracker = sv.ByteTrack()
 
-polygon = np.array([[699, 549], [768, 549], [778, 760], [696, 760]])
+polygon =  np.array([[832, 919], [822, 635], [916, 635], [932, 929]])
 #polygon2 = np.array([[619, 307], [625, 434], [952, 437], [937, 309]])
 polygon2 = np.array([[1219, 557], [1225, 934], [1852, 937], [1837, 559]])
-polygon3 = np.array([[608, 319], [677, 319], [675, 11], [589, 9]])
+polygon3 = np.array([[908, 319], [977, 319],[975, 11], [889, 9]])
 
 zone = sv.PolygonZone(polygon=polygon)
 zone2 = sv.PolygonZone(polygon=polygon2)
