@@ -11,7 +11,7 @@ st.set_page_config(page_title="YOLO + Supervision Demo", layout="wide")
 st.title("🎥 Detección con YOLOv8 + Supervision + Streamlit")
 
 # Cargar el modelo YOLO
-model = YOLO("yolov8n.pt")
+model = YOLO("traffic_analysis.pt")
 
 # Inicializar el tracker y los anotadores
 tracker = sv.ByteTrack()
@@ -49,7 +49,7 @@ if video_file is not None:
         f.write(video_file.read())
     video_path = tfile
 else:
-    video_path = "../sampleVideos/ranchoNavarra.mp4"
+    video_path = "../sampleVideos/fuentesBethoven.mp4"
 
 # --------------------------
 # Mostrar video procesado
