@@ -156,7 +156,6 @@ counts_z2, annotated_z2 = count_classes_in_zone(
 #counts = {"car": 20, "motorcycle": 6, "bus": 2, "truck": 3}
 counts = Counter(counts_z2)
 avg_time = {"car": 2.0, "motorcycle": 1.5, "bus": 4.5, "truck": 4.0}
-no_of_lanes = 2
 
 #print(f"GST = {gst:.2f} s")  # 23.33 
 ##############################################################################################
@@ -176,14 +175,17 @@ def calculateTimeCycle(counts, avg_time, no_of_lanes):
 frameList = [
     {
     "frame": cv2.imread(SOURCE_IMG_PATH_1),
-    "polygon" : polygon
+    "polygon" : polygon,
+    "lanes": 2
     },
      {
          "frame": cv2.imread(SOURCE_IMG_PATH_2),
-    "polygon" : polygon2
+    "polygon" : polygon2,
+    "lanes": 3
      },{
          "frame": cv2.imread(SOURCE_IMG_PATH_3),
-    "polygon" : polygon3
+    "polygon" : polygon3,
+    "lanes": 2
      }
    ]
 
@@ -196,7 +198,7 @@ for idx, item in enumerate(frameList):
         return_annotated=True
     )
     print(f"Frame {idx+1} - Counts: {counts}")
-    gst = calculateTimeCycle(counts, avg_time, no_of_lanes)
+    gst = calculateTimeCycle(counts, avg_time,item["lanes"])
     print(f"Frame {idx+1} - GST: {gst}")
     if annotated is not None:
         sv.plot_image(annotated)
