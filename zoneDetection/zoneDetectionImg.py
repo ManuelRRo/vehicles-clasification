@@ -155,7 +155,7 @@ counts_z2, annotated_z2 = count_classes_in_zone(
 
 #counts = {"car": 20, "motorcycle": 6, "bus": 2, "truck": 3}
 counts = Counter(counts_z2)
-avg_time = {"car": 2.0, "motorcycle": 1.5, "bus": 4.5, "truck": 4.0}
+avg_time = {"car": 4.0, "motorcycle": 3, "bus": 5.5, "truck": 10.0}
 
 #print(f"GST = {gst:.2f} s")  # 23.33 
 ##############################################################################################
@@ -164,7 +164,7 @@ def calculateTimeCycle(counts, avg_time, no_of_lanes):
     if not counts:
         return {"green": 10, "red": 10, "yellow": 5}
 
-    numerator = sum(counts[c]*avg_time[c] for c in counts)
+    numerator = sum(counts[c]*avg_time[c] for c in counts) +10
 
     gst = numerator / (no_of_lanes + 1)
 
@@ -189,6 +189,8 @@ frameList = [
      }
    ]
 
+gst_values = []
+
 for idx, item in enumerate(frameList):
     counts, annotated = count_classes_in_zone(
         item["frame"],
@@ -199,11 +201,18 @@ for idx, item in enumerate(frameList):
     )
     print(f"Frame {idx+1} - Counts: {counts}")
     gst = calculateTimeCycle(counts, avg_time,item["lanes"])
+    value = {"cicle_times": gst, "frameAnnotated": annotated}
+    gst_values.append(value)
     print(f"Frame {idx+1} - GST: {gst}")
     if annotated is not None:
         sv.plot_image(annotated)
         plt.savefig(f"resultado_frame_{idx+1}.png")
 
+print (f"{gst_values}")
+import streamlit as st
+
+for idx, item in enumerate(gst_values):
+    st.image(item["frameAnnotated"], caption=f"Frame {idx+1} - Cicle Times: {item['cicle_times']}")
 ##############################################################################################
 # Detecto correctamente los 3 vehiculos
 # import supervision as sv

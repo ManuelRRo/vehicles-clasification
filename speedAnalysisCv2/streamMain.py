@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 import supervision as sv
+import matplotlib.pyplot as plt
 
 # --------------------------
 # Configuración inicial
@@ -18,9 +19,10 @@ tracker = sv.ByteTrack()
 
 polygon =  np.array([[832, 919], [822, 635], [916, 635], [932, 929]])
 #polygon2 = np.array([[619, 307], [625, 434], [952, 437], [937, 309]])
-polygon2 = np.array([[1219, 557], [1225, 934], [1852, 937], [1837, 559]])
-polygon3 = np.array([[908, 319], [977, 319],[975, 11], [889, 9]])
-
+#polygon2 = np.array([[1219, 557], [1225, 934], [1852, 937], [1837, 559]])
+polygon2 = np.array([[1212, 502], [1206, 700], [1794, 748], [1791, 555]])
+#polygon3 = np.array([[908, 319], [977, 319],[975, 11], [889, 9]])
+polygon3 = np.array([[845, 712], [1145, 745], [1166, 475], [866, 450]])
 zone = sv.PolygonZone(polygon=polygon)
 zone2 = sv.PolygonZone(polygon=polygon2)
 zone3 = sv.PolygonZone(polygon=polygon3)
@@ -78,16 +80,11 @@ else:
 # --------------------------
 cap = cv2.VideoCapture(video_path)
 stframe = st.empty()
-
-while cap.isOpened():
-    ret, frame = cap.read()
-    if not ret:
-        break
-
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+frame_generator = sv.get_video_frames_generator(source_path=video_path)
+for frame in frame_generator:
     annotated_frame = process_frame(frame)
-
     stframe.image(annotated_frame, channels="RGB")
 
 cap.release()
 st.success("✅ Video finalizado")
+
