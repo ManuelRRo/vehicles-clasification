@@ -10,6 +10,10 @@ SOURCE_VIDEO_PATH = f"{HOME}/proceres.mp4"
 SOURCE_VIDEO_PATH2 = f"{HOME}/frames/frameProceres.png"
 SOURCE_VIDEO_PATH3 = f"{HOME}/frames/bethoven2.png"
 
+SOURCE_IMG_PATH_1 = f"{HOME}/frames/bethoven1.png"
+SOURCE_IMG_PATH_2 = f"{HOME}/frames/bethoven2.png"
+SOURCE_IMG_PATH_3 = f"{HOME}/frames/bethoven3.png"
+
 #model = YOLO("yolov8n.pt")
 model = YOLO("traffic_analysis.pt")
 print(f"model.names {model.names}")
@@ -165,15 +169,39 @@ def calculateTimeCycle(counts, avg_time, no_of_lanes):
 
     gst = numerator / (no_of_lanes + 1)
 
-    result = {"green": gst, "red": 10, "yellow": 5}
-    
+    result = {"green": round(gst), "red": 10, "yellow": 5}
+
     return result
 
-option = 0
-while option < 5:
-    print(f"Option {option+1}: {calculateTimeCycle(counts, avg_time, no_of_lanes)}")
+frameList = [
+    {
+    "frame": cv2.imread(SOURCE_IMG_PATH_1),
+    "polygon" : polygon
+    },
+     {
+         "frame": cv2.imread(SOURCE_IMG_PATH_2),
+    "polygon" : polygon2
+     },{
+         "frame": cv2.imread(SOURCE_IMG_PATH_3),
+    "polygon" : polygon3
+     }
+   ]
 
-    option += 1
+for idx, item in enumerate(frameList):
+    counts, annotated = count_classes_in_zone(
+        item["frame"],
+        item["polygon"],          # o zone2
+        model,
+        tracker,
+        return_annotated=True
+    )
+    print(f"Frame {idx+1} - Counts: {counts}")
+    gst = calculateTimeCycle(counts, avg_time, no_of_lanes)
+    print(f"Frame {idx+1} - GST: {gst}")
+    if annotated is not None:
+        sv.plot_image(annotated)
+        plt.savefig(f"resultado_frame_{idx+1}.png")
+
 ##############################################################################################
 # Detecto correctamente los 3 vehiculos
 # import supervision as sv
