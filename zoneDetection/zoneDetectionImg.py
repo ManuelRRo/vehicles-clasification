@@ -4,6 +4,7 @@ import numpy as np
 import supervision as sv
 import os
 import cv2
+from collections import Counter
 HOME = os.getcwd()
 SOURCE_VIDEO_PATH = f"{HOME}/proceres.mp4"
 SOURCE_VIDEO_PATH2 = f"{HOME}/frames/frameProceres.png"
@@ -42,8 +43,35 @@ detections = tracker.update_with_detections(detections)
 detections_in_polygon_1 = zone.trigger(detections=detections)
 detections_in_polygon_2 = zone2.trigger(detections=detections)
 detections_in_polygon_3 = zone3.trigger(detections=detections)
-print(f"detecciones en results {detections} \n")
-print(f"detecciones en zona \n {detections_in_polygon_1} ")
+
+det_z1 = detections[detections_in_polygon_1]
+det_z2 = detections[detections_in_polygon_2]
+det_z3 = detections[detections_in_polygon_3]
+
+# === NUEVO: nombres de clase por zona ===
+classes_z1 = [model.names[int(c)] for c in det_z1.class_id]
+classes_z2 = [model.names[int(c)] for c in det_z2.class_id]
+classes_z3 = [model.names[int(c)] for c in det_z3.class_id]
+
+print("Clases en zona 1:", classes_z1)
+print("Clases en zona 2:", classes_z2)
+print("Clases en zona 3:", classes_z3)
+
+print("Conteo por clase (zona 2):", Counter(classes_z2))
+
+#counts = {"car": 20, "motorcycle": 6, "bus": 2, "truck": 3}
+counts = Counter(classes_z2)
+avg_time = {"car": 2.0, "motorcycle": 1.5, "bus": 4.5, "truck": 4.0}
+no_of_lanes = 2
+
+numerador = sum(counts[c]*avg_time[c] for c in counts)
+gst = numerador / (no_of_lanes + 1)
+print(f"GST = {gst:.2f} s")  # 23.33 
+
+# print(f"detecciones en results {detections} \n")
+# print(f"detecciones en zona \n {detections_in_polygon_1} ")
+# print(f"detecciones en zona \n {detections_in_polygon_2} ")
+# print(f"detecciones en zona \n {detections_in_polygon_3} ")
 
 # annotate
 labels = [f"{model.names[class_id]} {confidence:0.2f}" for _, _, confidence, class_id, _, _ in detections]
