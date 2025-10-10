@@ -155,7 +155,7 @@ counts_z2, annotated_z2 = count_classes_in_zone(
 
 #counts = {"car": 20, "motorcycle": 6, "bus": 2, "truck": 3}
 counts = Counter(counts_z2)
-avg_time = {"car": 4.0, "motorcycle": 3, "bus": 5.5, "truck": 10.0}
+avg_time = {"car": 4.0, "motorcycle": 3.0, "bus": 5.5, "truck": 10.0}
 
 #print(f"GST = {gst:.2f} s")  # 23.33 
 ##############################################################################################
