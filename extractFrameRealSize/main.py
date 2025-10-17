@@ -19,7 +19,7 @@ def get_frame_native(video_path: str, frame_idx: int = None, time_s: float = Non
     return frame_bgr
 
 # Ejemplo:
-frame = get_frame_native("fuentesBethoven.mp4", time_s=40)  # frame en el segundo 3.2, tamaño original
+frame = get_frame_native("fuentesBethoven17seg.mp4", time_s=2)  # frame en el segundo 3.2, tamaño original
 h, w = frame.shape[:2]
 print("Tamaño nativo:", (w, h))  # Úsalo para definir PolygonZone
-cv2.imwrite("frame_nativo.png", frame, [cv2.IMWRITE_PNG_COMPRESSION, 3])
+cv2.imwrite("frame_nativo2.png", frame, [cv2.IMWRITE_PNG_COMPRESSION, 3])
