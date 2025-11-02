@@ -41,7 +41,9 @@ def callback(frame: np.ndarray, _: int) -> np.ndarray:
     detections = sv.Detections.from_ultralytics(results)
     detections = tracker.update_with_detections(detections)
 
+    zone.trigger(detections=detections)
     zone2.trigger(detections=detections)
+    zone3.trigger(detections=detections)
 
     labels = [
         f"#{tracker_id} {results.names[class_id]}"
@@ -55,7 +57,11 @@ def callback(frame: np.ndarray, _: int) -> np.ndarray:
     annotated_frame = label_annotator.annotate(
         annotated_frame, detections=detections, labels=labels)
     
+    annotated_frame = zone_annotator.annotate(scene=annotated_frame)
+    
     annotated_frame = zone_annotator2.annotate(scene=annotated_frame)
+
+    annotated_frame = zone_annotator3.annotate(scene=annotated_frame)
     
     return trace_annotator.annotate(
         annotated_frame, detections=detections)
