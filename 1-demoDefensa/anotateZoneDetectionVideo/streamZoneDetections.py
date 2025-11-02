@@ -7,14 +7,18 @@ import streamlit as st
 import supervision as sv
 from ultralytics import YOLO
 
-st.set_page_config(page_title="Traffic Stream", layout="wide")
-
 SOURCE_VIDEO_PATH = "fuentesBethoven17seg.mp4"
 MODEL_PATH = "traffic_analysis.pt"
 
 POLYGON_ZONE1 = np.array([[954, 789], [960, 1074], [1085, 1071], [1070, 786]])
 POLYGON_ZONE2 = np.array([[1132, 496], [1147, 674], [1770, 656], [1749, 463]])
 POLYGON_ZONE3 = np.array([[933, 457], [829, 454], [832, 6], [927, 9]])
+
+
+st.set_page_config(page_title="Traffic Stream", layout="wide")
+frame_idx = 0
+video_info = sv.VideoInfo.from_video_path(video_path="fuentesBethoven17seg.mp4")
+total_frames = video_info.total_frames if video_info.total_frames is not None else 1
 
 @st.cache_resource
 def load_tools():
@@ -40,6 +44,13 @@ with c2:
     st.text(SOURCE_VIDEO_PATH)
     start_btn = st.button("▶️ Iniciar / Reiniciar")
     stop_btn = st.button("⏹️ Detener")
+    progress_bar = st.progress(0, text="Preparando…")
+    if "zone_counts" not in st.session_state:
+        st.session_state.zone_counts = {"Zona 1": 0, "Zona 2": 0, "Zona 3": 0}
+    
+    st.markdown("### 🚗 Conteo por zona (en tiempo real)")
+    counts_ph = st.empty()
+
 
 if "running" not in st.session_state:
     st.session_state.running = False
@@ -49,6 +60,7 @@ if stop_btn:  st.session_state.running = False
 frame_area = c1.empty()
 
 if st.session_state.running:
+    
     cap = cv2.VideoCapture(SOURCE_VIDEO_PATH)
     if not cap.isOpened():
         st.error(f"No se pudo abrir el video: {SOURCE_VIDEO_PATH}")
@@ -98,6 +110,21 @@ if st.session_state.running:
         rgb = cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB)
         frame_area.image(rgb, use_container_width=True)
 
+        frame_idx += 1
+
+        st.session_state.zone_counts["Zona 1"] = zone1.current_count
+        st.session_state.zone_counts["Zona 2"] = zone2.current_count
+        st.session_state.zone_counts["Zona 3"] = zone3.current_count
+
+        counts_ph.table([
+        {"Zona": "Zona 1", "Conteo": st.session_state.zone_counts["Zona 1"]},
+        {"Zona": "Zona 2", "Conteo": st.session_state.zone_counts["Zona 2"]},
+        {"Zona": "Zona 3", "Conteo": st.session_state.zone_counts["Zona 3"]},
+        ])
+        
+        progress_bar.progress(min(frame_idx / total_frames, 1.0),
+                                  text=f"Procesando frame {frame_idx}/{total_frames}")
+        
         time.sleep(1.0 / fps)
 
     cap.release()
