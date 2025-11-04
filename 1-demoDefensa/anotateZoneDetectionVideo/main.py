@@ -1,6 +1,7 @@
 import numpy as np
 import supervision as sv
 from ultralytics import YOLO
+from ultralytics.solutions import speed_estimation
 
 SOURCE_VIDEO_PATH = "fuentesBethoven17seg.mp4"
 

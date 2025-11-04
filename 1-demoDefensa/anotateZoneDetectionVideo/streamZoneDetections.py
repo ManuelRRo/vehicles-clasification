@@ -37,7 +37,7 @@ def load_tools():
 
 model, tracker, box_annotator, label_annotator, trace_annotator, (zone1, zone2, zone3), (za1, za2, za3) = load_tools()
 
-st.title("🚦 Traffic Analysis Stream (YOLO + Supervision)")
+st.title("🚦 Anlisis de tráfico (YOLO + Supervision)")
 c1, c2 = st.columns([3, 1])
 with c2:
     st.markdown("**Fuente de video:**")
@@ -101,7 +101,7 @@ if st.session_state.running:
         zone3.trigger(detections=detections)
 
         annotated = box_annotator.annotate(frame.copy(), detections=detections)
-        annotated = label_annotator.annotate(annotated, detections=detections, labels=labels)
+        #annotated = label_annotator.annotate(annotated, detections=detections, labels=labels)
         annotated = za1.annotate(scene=annotated)
         annotated = za2.annotate(scene=annotated)
         annotated = za3.annotate(scene=annotated)
