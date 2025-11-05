@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 import threading
+import torch
 _thread_local = threading.local()
 #Define polygons zones
 # Polygons From PolygonZone
@@ -130,9 +131,9 @@ def process_frame(frame, heatmap=None):
 
     return annotated_frame, heatmap
 
-image = cv2.imread("./frames/frame1.png")
+image = cv2.imread("./frames/bethoven1.png")
 if image is None:
-    raise FileNotFoundError("No se pudo abrir './frames/frame1.png'")
+    raise FileNotFoundError("No se pudo abrir './frames/bethoven1.png'")
 
 image_wh = (image.shape[1], image.shape[0])
 setup_zones(image_wh)

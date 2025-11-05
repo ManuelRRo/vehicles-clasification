@@ -7,7 +7,7 @@ epochs = 50
 imgsz = 640
 batch = 16
 project = "runs_train"        # directory to save results
-name = "yolov8n_custom"       # save results to project/name
+name = "yolov8n_custom"       # save results to project/name try with Yolo11npt
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 # Make sure paths exist
 # ---- LOAD MODEL ----
