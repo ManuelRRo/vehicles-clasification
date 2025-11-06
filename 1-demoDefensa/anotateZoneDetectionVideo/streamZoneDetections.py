@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import streamlit as st
 import supervision as sv
+from trafficCalculationTime.algorythm import detect_and_count_vehicles
 from ultralytics import YOLO
 
 SOURCE_VIDEO_PATH = "fuentesBethoven17seg.mp4"
@@ -106,6 +107,83 @@ if st.session_state.running:
         annotated = za2.annotate(scene=annotated)
         annotated = za3.annotate(scene=annotated)
         annotated = trace_annotator.annotate(annotated, detections=detections)
+
+        # # ======= AQUI ESCRIBES EL TEXTO EN EL FRAME (BGR) =======
+        # texto1 = f"Zona 1: {zone1.current_count}"
+        # texto2 = f"Zona 2: {zone2.current_count}"
+        # texto3 = f"Zona 3: {zone3.current_count}"
+
+        # cv2.putText(
+        #     annotated, texto1,
+        #     (20, 40),                      # posición (x, y)
+        #     cv2.FONT_HERSHEY_SIMPLEX,      # fuente
+        #     1.0,                           # tamaño
+        #     (0, 255, 0),                   # color BGR (verde)
+        #     2,                             # grosor
+        #     cv2.LINE_AA                    # tipo de línea
+        # )
+
+        # cv2.putText(annotated, texto2, (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2, cv2.LINE_AA)
+        # cv2.putText(annotated, texto3, (600, 120), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2, cv2.LINE_AA)
+        info_title = "Calle 3"
+        info_vehicles = f"Vehiculos: {zone3.current_count}"
+        
+        x, y = 500, 30
+        width, height = 280, 100  # tamaño del rectángulo
+
+        # Fondo blanco con borde verde
+        cv2.rectangle(annotated, (x, y), (x + width, y + height), (0, 255, 0), -1)  # relleno verde
+        cv2.rectangle(annotated, (x + 2, y + 2), (x + width - 2, y + height - 2), (255, 255, 255), -1)  # interior blanco
+
+        # Escribir texto encima (BGR)
+        cv2.putText(annotated, info_title, (x + 10, y + 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)  # título
+        cv2.putText(annotated, info_title, (x + 10, y + 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1, cv2.LINE_AA)
+
+        cv2.putText(annotated, info_vehicles, (x + 10, y + 60),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2, cv2.LINE_AA)
+        
+        info_title = "Calle 2"
+        info_vehicles = f"Vehiculos: {zone2.current_count}"
+        
+        x, y = 1500, 320
+        width, height = 280, 100  # tamaño del rectángulo
+
+        # Fondo blanco con borde verde
+        cv2.rectangle(annotated, (x, y), (x + width, y + height), (0, 255, 0), -1)  # relleno verde
+        cv2.rectangle(annotated, (x + 2, y + 2), (x + width - 2, y + height - 2), (255, 255, 255), -1)  # interior blanco
+
+        # Escribir texto encima (BGR)
+        cv2.putText(annotated, info_title, (x + 10, y + 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)  # título
+        cv2.putText(annotated, info_title, (x + 10, y + 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1, cv2.LINE_AA)
+
+        cv2.putText(annotated, info_vehicles, (x + 10, y + 60),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2, cv2.LINE_AA)
+        
+        info_title = "Calle 1"
+        info_vehicles = f"Vehiculos: {zone1.current_count}"
+        
+        x, y = 500, 700
+        width, height = 280, 100  # tamaño del rectángulo
+
+        # Fondo blanco con borde verde
+        cv2.rectangle(annotated, (x, y), (x + width, y + height), (0, 255, 0), -1)  # relleno verde
+        cv2.rectangle(annotated, (x + 2, y + 2), (x + width - 2, y + height - 2), (255, 255, 255), -1)  # interior blanco
+
+        # Escribir texto encima (BGR)
+        cv2.putText(annotated, info_title, (x + 10, y + 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)  # título
+        cv2.putText(annotated, info_title, (x + 10, y + 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1, cv2.LINE_AA)
+
+        cv2.putText(annotated, info_vehicles, (x + 10, y + 60),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2, cv2.LINE_AA)
+
+        
+        
 
         rgb = cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB)
         frame_area.image(rgb, use_container_width=True)
