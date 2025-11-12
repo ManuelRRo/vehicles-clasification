@@ -55,8 +55,6 @@ def callback(frame: np.ndarray, _: int) -> np.ndarray:
     annotated_frame = box_annotator.annotate(
         frame.copy(), detections=detections)
     
-    annotated_frame = label_annotator.annotate(
-        annotated_frame, detections=detections, labels=labels)
     
     annotated_frame = zone_annotator.annotate(scene=annotated_frame)
     
