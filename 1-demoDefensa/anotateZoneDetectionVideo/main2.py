@@ -246,3 +246,4 @@ if st.session_state.running:
     cap.release()
     st.success("Video finalizado.")
 else:
+    c1.info("Haz clic en **Iniciar / Reiniciar** para comenzar.")
