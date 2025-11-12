@@ -22,6 +22,10 @@ print(videoInfo)
 START = sv.Point(0, 280)
 END = sv.Point(640, 280)
 
+#START = sv.Point(631, 207)
+#END = sv.Point(3, 223)
+
+
 model = YOLO("yolo11x.pt")
 
 line_zone = sv.LineZone(start=START, end=END)
