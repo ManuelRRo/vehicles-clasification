@@ -76,21 +76,10 @@ def callback(frame: np.ndarray, index:int) -> np.ndarray:
     annotated_frame = bounding_box_annotator.annotate(
         scene=annotated_frame,
         detections=detections)
-    annotated_frame = label_annotator.annotate(
-        scene=annotated_frame,
-        detections=detections,
-        labels=labels)
-
-#    crossed_in, crossed_out = line_zone.trigger(detections)
-   # line_zone.trigger(detections)
-#    detections_in = line_zone.out_count
-#    detections_out = line_zone.in_count
-#    detections_in = detections[crossed_in]
-#    detections_out = detections[crossed_out]
-#    class_id_test = detections_out.class_id
-#    if len(class_id_test) > 0:
-#       print(f"detecction out class {class_id_test} \n")
-#    print(f"detection out {detections_in}")
+    # annotated_frame = label_annotator.annotate(
+    #     scene=annotated_frame,
+    #     detections=detections,
+    #     labels=labels)
 
 
 # --- dentro de tu loop de procesamiento ---
