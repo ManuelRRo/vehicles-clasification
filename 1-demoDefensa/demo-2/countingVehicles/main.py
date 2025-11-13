@@ -1,4 +1,3 @@
-# app.py
 import time
 from pathlib import Path
 import cv2
@@ -7,9 +6,11 @@ import streamlit as st
 import supervision as sv
 from ultralytics import YOLO
 from collections import defaultdict
+import pandas as pd
+import json
 
-SOURCE_VIDEO_PATH = "../../../../resources/videos/gabrielaMistralNoAerea.mp4"
-MODEL_PATH = "../../../../resources/models/traffic_analysis.pt"
+SOURCE_VIDEO_PATH = "../../resources/videos/gabrielaMistralNoAerea.mp4"
+MODEL_PATH = "../../resources/models/traffic_analysis.pt"
 generator = sv.get_video_frames_generator(SOURCE_VIDEO_PATH)
 frame = next(generator)
 model = YOLO(MODEL_PATH)
@@ -202,7 +203,6 @@ if st.session_state.running:
         print("Resumen acumulado de cruces:", dict(cross_counts_four))
         print("Resumen acumulado de cruces:", dict(cross_counts_three))
         print("Resumen acumulado de cruces:", dict(cross_counts_two))
-        
         # Line zone annotators
         line_zone_annotator.annotate(annotated, line_counter=line_zone)
         line_zone_annotator.annotate(annotated, line_counter=line_zone2)
@@ -284,10 +284,26 @@ if st.session_state.running:
     "zone3": dict(cross_counts_three),
     "zone4": dict(cross_counts_four),
     }
-    
-    print("Resumen final:", merged)
 
+    txt = st.text_area(
+    "Prompt Para analisis",
+    f"""
+    En base a la información presentada, puedes recomendar cambios en los tiempos de fase de los semáforos.
+
+    Conteo por fases:
+    {json.dumps({
+        "Norte a Sur": cross_counts_one,
+        "Sur a Norte": cross_counts_two,
+        "Este a Oeste": cross_counts_three,
+        "Oeste a Este": cross_counts_four
+    }, indent=4)}
+    """,
+    )
+
+#    df = pd.DataFrame(resumen_final).fillna(0).astype(int).T
+#    st.table(df)
     cap.release()
     st.success("Video finalizado.")
+    
 else:
     c1.info("Haz clic en **Iniciar / Reiniciar** para comenzar.")
