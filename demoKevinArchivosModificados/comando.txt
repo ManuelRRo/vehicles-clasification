@@ -1,0 +1,16 @@
+python -u .\analitica01.py `
+  --model "best.pt" `
+  --source "51.mp4" `
+  --road-quad "8,570,1275,400,800,134,509,132" `
+  --road-width-m 20.5 `
+  --road-length-m 250 `
+  --line-frac 0.05`
+  --approach A->B `
+  --speed-window 0.7 `
+  --speed-limit-kmh 90 `
+  --save-video "fusion_out.mp4" `
+  --events-csv "eventos_aforo.csv" `
+  --violations-csv "vel_infracciones.csv" `
+  --save-frames-dir "frames_infracciones" `
+  --save-crops `
+  --show
